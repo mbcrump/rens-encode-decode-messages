@@ -1,0 +1,90 @@
+<html>
+  <head>
+    <script type="text/javascript">
+      var alpha = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ 0123456789.,!?<>"/\\\'';
+      var key = 'DBCAEFGHIJKLMNOPQRSTUVWXYZ 0193456782.,!?<>"/\\\'';
+      var deg = 360 / key.length;
+
+      function shuffle(theString) {
+        var parts = theString.split('');
+        for (var i = parts.length; i > 0;) {
+            var random = parseInt(Math.random() * i);
+            var temp = parts[--i];
+            parts[i] = parts[random];
+            parts[random] = temp;
+        }
+        return parts.join('');
+      }
+
+      function encode() {
+        var cKey = key;
+        var pt = document.getElementById('plaintext').value;
+        var ct = '';
+        for(i=0;i<pt.length;i++) {
+          // For each character, encode, and then update the key
+          cc = pt.charAt(i).toUpperCase();
+          shifts = alpha.indexOf(cc);
+          ec = cKey.charAt(shifts);
+            ct = ct + ec;
+        /*  if (shifts < 0) {
+            ct = ct + cc;
+          } else {
+            ec = cKey.charAt(shifts);
+            ct = ct + ec;
+            cKey = cKey.substring(shifts)+cKey.substring(0,shifts);
+          }
+          */
+        }
+        document.getElementById('ciphertext').value = ct;
+      }
+
+      function decode() {
+        var cKey = key;
+        var ct = document.getElementById('ciphertext').value;
+        var pt = '';
+        for(i=0;i<ct.length;i++) {
+          // For each character, encode, and then update the key
+          cc = ct.charAt(i).toUpperCase();
+          shifts = cKey.indexOf(cc);
+          ec = alpha.charAt(shifts);
+            pt = pt + ec;
+          /*
+          if (shifts < 0) {
+            pt = pt + cc;
+          } else {
+            ec = alpha.charAt(shifts);
+            pt = pt + ec;
+            cKey = cKey.substring(shifts)+cKey.substring(0,shifts);
+          }
+          */
+        }
+        document.getElementById('plaintext').value = pt;
+      }
+    </script>
+    <style>
+
+       #right-container {
+        float: none;
+       }
+
+
+    </style>
+  </head>
+  <body>
+    <div id="right-container">
+      <strong>Ren and Dad's Secret Decoder Site</strong><br/><br/>
+      <strong>Plain Text:</strong><br/>
+      <textarea rows=8 cols=80 id="plaintext"></textarea><br/>
+      <strong>Decoded Text:</strong><br/>
+      <textarea rows=8 cols=80 id="ciphertext"></textarea><br/>
+      <!-- <strong>Key:</strong><br/>
+      <input type=text size=50 id="key"/><br/><br/> -->
+      <button onclick="encode();">Encode</button> 
+      <button onclick="decode();">Decode</button>
+      <script type="text/javascript">
+        document.getElementById('key').value = key;
+      </script>
+    </div>
+	  <br/><br/>
+  </body>
+</html>
